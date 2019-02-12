@@ -17,6 +17,8 @@ import br.com.castgroup.comparator.entity.ResponseData;
 import br.com.castgroup.comparator.exception.ComparatorDataNotFoundException;
 import br.com.castgroup.comparator.exception.InvalidContentException;
 import br.com.castgroup.comparator.exception.InvalidDiffIdException;
+import br.com.castgroup.comparator.exception.LeftSideNotFilledException;
+import br.com.castgroup.comparator.exception.RightSideNotFilledException;
 import br.com.castgroup.comparator.service.ComparatorService;
 import br.com.castgroup.comparator.service.impl.ComparatorServiceImpl;
 
@@ -71,10 +73,12 @@ public class ComparatorController {
 	 * @return the message with the result of the comparison.
 	 * @throws InvalidDiffIdException An invalid identifier was passed as parameter.
 	 * @throws ComparatorDataNotFoundException A data object was not found in repository with the passed id.
+	 * @throws LeftSideNotFilledException Occurs when the method was called before add the left side
+	 * @throws RightSideNotFilledException Occurs when the method was called before add the right side
 	 */
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public HttpEntity<ResponseData> compare(@PathVariable("id") String diffId)
-			throws InvalidDiffIdException, ComparatorDataNotFoundException {
+			throws InvalidDiffIdException, ComparatorDataNotFoundException, LeftSideNotFilledException, RightSideNotFilledException {
 
 		return ResponseEntity.ok(service.compare(diffId));
 	}

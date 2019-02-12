@@ -14,6 +14,8 @@ import br.com.castgroup.comparator.entity.ResponseData;
 import br.com.castgroup.comparator.exception.ComparatorDataNotFoundException;
 import br.com.castgroup.comparator.exception.InvalidContentException;
 import br.com.castgroup.comparator.exception.InvalidDiffIdException;
+import br.com.castgroup.comparator.exception.LeftSideNotFilledException;
+import br.com.castgroup.comparator.exception.RightSideNotFilledException;
 import br.com.castgroup.comparator.repository.ComparatorDataRepository;
 import br.com.castgroup.comparator.service.ComparatorService;
 
@@ -69,15 +71,20 @@ public class ComparatorServiceImpl implements ComparatorService {
 	}
 
 	@Override
-	public ResponseData compare(String diffId) throws InvalidDiffIdException, ComparatorDataNotFoundException {
+	public ResponseData compare(String diffId) throws InvalidDiffIdException, ComparatorDataNotFoundException, LeftSideNotFilledException, RightSideNotFilledException {
 		// do the validations
 		validateDiffId(diffId);
 
-		// verify if the object was stored in repository
+		// verify if the object was stored in repository, and if the left and right side was filled.
 		Optional<ComparatorData> optionalData = repository.findById(Long.parseLong(diffId));
 		if (optionalData.isEmpty()) {
 			throw new ComparatorDataNotFoundException();
+		} else if (optionalData.get().getRight() == null) {
+			throw new RightSideNotFilledException();
+		} else if (optionalData.get().getLeft() == null) {
+			throw new LeftSideNotFilledException();
 		}
+		
 		// get the bytes of the objects
 		byte[] bytesLeft = optionalData.get().getLeft().getBytes();
 		byte[] bytesRight = optionalData.get().getRight().getBytes();
