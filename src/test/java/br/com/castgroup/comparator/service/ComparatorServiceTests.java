@@ -17,6 +17,11 @@ import br.com.castgroup.comparator.exception.InvalidDiffIdException;
 import br.com.castgroup.comparator.exception.LeftSideNotFilledException;
 import br.com.castgroup.comparator.exception.RightSideNotFilledException;
 
+/**
+ * Unit tests
+ * @author alsantos
+ *
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class ComparatorServiceTests {
