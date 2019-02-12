@@ -153,7 +153,7 @@ public class ComparatorServiceTests {
 		assertEquals(data.getId(), 6L);
         assertEquals(data.getRight(), test1); 
         assertEquals(data.getLeft(), test1); 
-        assertEquals(service.compare("6").getMessage(), "Objects are equal!");
+        assertEquals(service.compare("6").getMessage(), "true");
     }
 	
 	@Test
@@ -163,7 +163,7 @@ public class ComparatorServiceTests {
 		assertEquals(data.getId(), 7L);
         assertEquals(data.getRight(), test1); 
         assertEquals(data.getLeft(), test2);         
-        assertEquals(service.compare("7").getMessage(), "Objects does not have the same size!");
+        assertEquals(service.compare("7").getMessage(), "size left: 7 size right: 8");
     }
 	
 	@Test

@@ -100,7 +100,7 @@ public class ComparatorControllerIT {
 				.content("{\n" + "  \"data\": " + "  \"VGVzdGU=\"" + "}")).andExpect(status().isOk()).andReturn();
 		mvc.perform(MockMvcRequestBuilders.get("/v1/diff/4").accept(MediaType.APPLICATION_JSON)
 				.contentType(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
-        .andExpect(content().string(containsString("Objects are equal!")));
+        .andExpect(content().string(containsString("true")));
 		
 		
 	}

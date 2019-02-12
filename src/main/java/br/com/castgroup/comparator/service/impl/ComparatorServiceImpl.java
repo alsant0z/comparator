@@ -95,9 +95,9 @@ public class ComparatorServiceImpl implements ComparatorService {
 		String offsets = "";
 
 		if (resultComparation) {
-			return new ResponseData("Objects are equal!");
+			return new ResponseData("true");
 		} else if (bytesLeft.length != bytesRight.length) {
-			return new ResponseData("Objects does not have the same size!");
+			return new ResponseData("size left: " + bytesLeft.length + " size right: " + bytesRight.length);
 
 		} else {
 			// verify the difference
