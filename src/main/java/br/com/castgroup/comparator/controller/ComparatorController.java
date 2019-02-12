@@ -20,6 +20,12 @@ import br.com.castgroup.comparator.exception.InvalidDiffIdException;
 import br.com.castgroup.comparator.service.ComparatorService;
 import br.com.castgroup.comparator.service.impl.ComparatorServiceImpl;
 
+/**
+ * Application Rest Controller. 
+ * The endpoints are mapped in this class.
+ * @author alsantos
+ *
+ */
 @RestController
 @RequestMapping("/v1/diff/{id}")
 public class ComparatorController {
@@ -29,6 +35,14 @@ public class ComparatorController {
 	@Autowired
 	private ComparatorService service;
 
+	/**
+	 * Post the left entry to the comparison.
+	 * @param diffId the identification of the operation.
+	 * @param requestData the json b64 encoded to be used in comparison.
+	 * @return the object stored in repository.
+	 * @throws InvalidDiffIdException An invalid identifier was passed as parameter.
+	 * @throws InvalidContentException if an invalid content was passed as parameter.
+	 */
 	@RequestMapping(value = "/left", method = RequestMethod.POST, produces = "application/json")
 	public HttpEntity<ComparatorData> addLeft(@PathVariable("id") String diffId, @RequestBody RequestData requestData)
 			throws InvalidDiffIdException, InvalidContentException {
@@ -36,6 +50,14 @@ public class ComparatorController {
 		return ResponseEntity.ok(service.addLeft(diffId, requestData.getData()));
 	}
 
+	/**
+	 * Post the right entry to the comparison.
+	 * @param diffId the identification of the operation.
+	 * @param requestData the json b64 encoded to be used in comparison.
+	 * @return the object stored in repository.
+	 * @throws InvalidDiffIdException An invalid identifier was passed as parameter.
+	 * @throws InvalidContentException if an invalid content was passed as parameter.
+	 */
 	@RequestMapping(value = "/right", method = RequestMethod.POST, produces = "application/json")
 	public HttpEntity<ComparatorData> addRight(@PathVariable("id") String diffId, @RequestBody RequestData requestData)
 			throws InvalidDiffIdException, InvalidContentException {
@@ -43,6 +65,13 @@ public class ComparatorController {
 		return ResponseEntity.ok(service.addRight(diffId, requestData.getData()));
 	}
 
+	/**
+	 * Compares the content data stored in left and right sides for a specific identifier.
+	 * @param diffId the identification of the operation.
+	 * @return the message with the result of the comparison.
+	 * @throws InvalidDiffIdException An invalid identifier was passed as parameter.
+	 * @throws ComparatorDataNotFoundException A data object was not found in repository with the passed id.
+	 */
 	@RequestMapping(method = RequestMethod.GET, produces = "application/json")
 	public HttpEntity<ResponseData> compare(@PathVariable("id") String diffId)
 			throws InvalidDiffIdException, ComparatorDataNotFoundException {

@@ -17,6 +17,11 @@ import br.com.castgroup.comparator.exception.InvalidDiffIdException;
 import br.com.castgroup.comparator.repository.ComparatorDataRepository;
 import br.com.castgroup.comparator.service.ComparatorService;
 
+/**
+ * The implementation of the ComparatorService.
+ * @author alsantos
+ *
+ */
 @Service
 public class ComparatorServiceImpl implements ComparatorService {
 	static final Logger log = LogManager.getLogger(ComparatorServiceImpl.class);
@@ -26,9 +31,11 @@ public class ComparatorServiceImpl implements ComparatorService {
 
 	@Override
 	public ComparatorData addLeft(String diffId, String content) throws InvalidDiffIdException, InvalidContentException {
+		// do the validations
 		validateDiffId(diffId);
 		validateContent(content);
 		
+		// update the object with passed parameters
 		Optional<ComparatorData> optionalData = repository.findById(Long.parseLong(diffId));
 		ComparatorData data = null;
 		if (optionalData.isPresent()) {
@@ -38,14 +45,17 @@ public class ComparatorServiceImpl implements ComparatorService {
 			data = new ComparatorData(Long.parseLong(diffId), content, null);			
 		}
 		
+		//save the object in repository
 		return repository.save(data);
 	}
 
 	@Override
 	public ComparatorData addRight(String diffId, String content) throws InvalidDiffIdException, InvalidContentException {
+		// do the validations
 		validateDiffId(diffId);
 		validateContent(content);
 		
+		//update the object with passed parameters
 		Optional<ComparatorData> optionalData = repository.findById(Long.parseLong(diffId));
 		ComparatorData data = null;
 		if (optionalData.isPresent()) {
@@ -54,22 +64,25 @@ public class ComparatorServiceImpl implements ComparatorService {
 		} else {
 			data = new ComparatorData(Long.parseLong(diffId), null, content);			
 		}
-		
+		//save the object in repository
 		return repository.save(data);
 	}
 
 	@Override
 	public ResponseData compare(String diffId) throws InvalidDiffIdException, ComparatorDataNotFoundException {
+		// do the validations
 		validateDiffId(diffId);
 
+		// verify if the object was stored in repository
 		Optional<ComparatorData> optionalData = repository.findById(Long.parseLong(diffId));
 		if (optionalData.isEmpty()) {
 			throw new ComparatorDataNotFoundException();
 		}
-
+		// get the bytes of the objects
 		byte[] bytesLeft = optionalData.get().getLeft().getBytes();
 		byte[] bytesRight = optionalData.get().getRight().getBytes();
 
+		// verify if it is equal
 		boolean resultComparation = Arrays.equals(bytesLeft, bytesRight);
 
 		String offsets = "";
@@ -80,7 +93,7 @@ public class ComparatorServiceImpl implements ComparatorService {
 			return new ResponseData("Objects does not have the same size!");
 
 		} else {
-
+			// verify the difference
 			byte different = 0;
 
 			for (int index = 0; index < bytesLeft.length; index++) {
